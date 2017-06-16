@@ -52,6 +52,52 @@ Don't:
 If no reference doc exists yet, then you can use the `helpText` as a stopgap for explaining
 both why the audit is important and how to fix it.
 
+## Tracking Errors
+
+We track our errors in the wild with Sentry. In general, do not worry about wrapping your audits or gatherers in try/catch blocks and reporting every error that could possibly occur; `lighthouse-core/runner.js` and `lighthouse-core/gather/gather-runner.js` already catch and report any errors that occur while running a gatherer or audit, including errors fatal to the entire run. However, there are some situations when you might want to expliticly handle an error and report it to Sentry or wrap it to avoid reporting. Generally, you can interact with Sentry simply by requiring the `lighthouse-core/lib/sentry.js` file and call its methods. The module exports a delegate that will correctly handle the error reporting based on the user's opt-in preference and will simply no-op if they haven't so you don't need to check.
+
+
+#### If you have an expected error that is recoverable but want to track how frequently it happens, *use Sentry.captureException*.
+
+```js
+const Sentry = require('./lighthouse-core/lib/sentry');
+
+try {
+  doRiskyThing();
+} catch (err) {
+  Sentry.captureException(err, {
+    tags: {audit: 'audit-name'},
+    level: 'warning',
+  });
+  doFallbackThing();
+}
+```
+
+#### If you throw an error in an audit to communicate audit failure instead of using the score property, *use createExpectedError*.
+
+```js
+const createExpectedError = require('./lighthouse-core/lib/expected-error');
+
+if (options.url.includes('uncool')) {
+  throw createExpectedError(new Error('Your site is not cool!'));
+}
+```
+
+#### If you need to track a code path that doesn't necessarily mean an error occurred, *use Sentry.captureMessage*.
+
+NOTE: If the message you're capturing is dynamic/based on user data or you need a stack trace, then create a fake error instead and use `Sentry.captureException` so that the instances will be grouped together in Sentry.
+
+```js
+const Sentry = require('./lighthouse-core/lib/sentry');
+
+if (networkRecords.length === 1) {
+  Sentry.captureMessage('Site only had 1 network request');
+  return null;
+} else {
+  // do your thang
+}
+```
+
 # For Maintainers
 
 ## Updating traceviewer source
@@ -110,7 +156,7 @@ echo "Upload the package zip to CWS dev dashboard"
 
 echo "Verify the npm package won't include unncessary files"
 yarn global add irish-pub pkgfiles
-irish-pub; pkgfiles;  
+irish-pub; pkgfiles;
 
 echo "ship it"
 npm publish

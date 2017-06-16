@@ -6,7 +6,8 @@ const SENTRY_URL = 'https://a6bb0da87ee048cc9ae2a345fc09ab2e:63a7029f46f74265981
 // Fix the polyfill. See https://github.com/GoogleChrome/lighthouse/issues/73
 self.setImmediate = function(...args) {
   const callback = args[0];
-  Promise.resolve().then(() => callback(...args));
+  const argsForCallback = args.slice(1);
+  Promise.resolve().then(() => callback(...argsForCallback));
   return 0;
 };
 

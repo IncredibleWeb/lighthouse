@@ -36,8 +36,8 @@ try {
 } catch (e) {
   inquirer = {
     prompt() {
-      console.error('module `inquirer` not installed. Not logging errors.');
-      return Promise.resolve(false);
+      console.error('module `inquirer` not installed. Not reporting errors.');
+      return Promise.resolve({isErrorReportingEnabled: false});
     }
   }
 }
