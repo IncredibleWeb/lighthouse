@@ -33,12 +33,6 @@ script:
   - yarn test-cli-formatting
   - yarn test-launcher-formatting
   - yarn lint
-  - yarn unit
-  - yarn closure
-  - yarn smoke
-  - yarn smokehouse
-  - yarn compile-devtools
-  - yarn plots-smoke
 after_success:
   - yarn codecov
 after_failure:
