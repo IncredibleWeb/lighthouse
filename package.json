@@ -30,7 +30,7 @@
     "smoke": "bash lighthouse-cli/test/smokehouse/offline-local/run-tests.sh && bash lighthouse-cli/test/smokehouse/perf/run-tests.sh && bash lighthouse-cli/test/smokehouse/dobetterweb/run-tests.sh && bash lighthouse-cli/test/smokehouse/byte-efficiency/run-tests.sh",
     "coverage": "node $(yarn bin)/istanbul cover -x \"**/third_party/**\" _mocha -- $(find */test -name '*-test.js') --timeout 10000 --reporter progress",
     "coveralls": "yarn coverage && cat ./coverage/lcov.info | coveralls",
-    "codecov": "node $(yarn bin)/istanbul cover -x \"**/third_party/**\" _mocha -- $(find */test -name '*-test.js') --timeout 10000 --report lcovonly -- -R spec && codecov",
+    "codecov": "node $(yarn bin)/istanbul cover -x \"**/third_party/**\" _mocha -- $(find */test -name '*-test.*s') --timeout 10000 --reporter progress --report lcovonly -- -R spec && codecov",
     "start": "gulp && node ./lighthouse-cli/index.js",
     "test": "yarn lint --silent && gulp && yarn unit && yarn closure && yarn test-cli-formatting && yarn test-launcher-formatting",
     "unit-core": "bash lighthouse-core/scripts/run-mocha.sh --core",
