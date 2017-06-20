@@ -8,6 +8,7 @@
 
 const gulp = require('gulp');
 const connect = require('gulp-connect');
+const autoprefixer = require('gulp-autoprefixer');
 const lighthouse = require('lighthouse');
 const chromeLauncher = require('lighthouse/chrome-launcher');
 const perfConfig = require('lighthouse/lighthouse-core/config/perf.json');
@@ -68,6 +69,12 @@ const handleError = function(e) {
 };
 
 const flags = {}; // available options - https://github.com/GoogleChrome/lighthouse/#cli-options
+
+gulp.task('styles', function() {
+  return gulp.src('./style.css')
+    .pipe(autoprefixer())
+    .pipe(gulp.dest('./public'));
+});
 
 gulp.task('lighthouse', function() {
   startServer();
