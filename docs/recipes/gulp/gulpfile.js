@@ -7,68 +7,68 @@
  */
 
 const gulp = require('gulp');
-const connect = require('gulp-connect');
+// const connect = require('gulp-connect');
 const autoprefixer = require('gulp-autoprefixer');
 const lighthouse = require('lighthouse');
-const chromeLauncher = require('lighthouse/chrome-launcher');
-const perfConfig = require('lighthouse/lighthouse-core/config/perf.json');
-const PORT = 8080;
+// const chromeLauncher = require('lighthouse/chrome-launcher');
+// const perfConfig = require('lighthouse/lighthouse-core/config/perf.json');
+// const PORT = 8080;
 
-/**
- * Start server
- */
-const startServer = function() {
-  return connect.server({
-    root: './public',
-    port: PORT
-  });
-};
+// /**
+//  * Start server
+//  */
+// const startServer = function() {
+//   return connect.server({
+//     root: './public',
+//     port: PORT
+//   });
+// };
 
-/**
- * Stop server
- */
-const stopServer = function() {
-  connect.serverClose();
-};
+// /**
+//  * Stop server
+//  */
+// const stopServer = function() {
+//   connect.serverClose();
+// };
 
-/**
- * Run lighthouse
- */
-function launchChromeAndRunLighthouse(url, flags, config = null) {
-  return chromeLauncher.launch().then(chrome => {
-    flags.port = chrome.port;
-    return lighthouse(url, flags, config).then(results =>
-      chrome.kill().then(() => results)
-    );
-  });
-}
+// /**
+//  * Run lighthouse
+//  */
+// function launchChromeAndRunLighthouse(url, flags, config = null) {
+//   return chromeLauncher.launch().then(chrome => {
+//     flags.port = chrome.port;
+//     return lighthouse(url, flags, config).then(results =>
+//       chrome.kill().then(() => results)
+//     );
+//   });
+// }
 
-/**
- * Handle ok result
- * @param {Object} results - Lighthouse results
- */
-const handleOk = function(results) {
-  stopServer();
-  console.log(results); // eslint-disable-line no-console
-  // TODO: use lighthouse results for checking your performance expectations.
-  // e.g. process.exit(1) or throw Error if score falls below a certain threshold.
-  // if (results.audits['first-meaningful-paint'].rawValue > 3000) {
-  //   console.log(`Warning: Time to first meaningful paint ${results.audits['first-meaningful-paint'].displayValue}`);
-  //   process.exit(1);
-  // }
-  return results;
-};
+// /**
+//  * Handle ok result
+//  * @param {Object} results - Lighthouse results
+//  */
+// const handleOk = function(results) {
+//   stopServer();
+//   console.log(results); // eslint-disable-line no-console
+//   // TODO: use lighthouse results for checking your performance expectations.
+//   // e.g. process.exit(1) or throw Error if score falls below a certain threshold.
+//   // if (results.audits['first-meaningful-paint'].rawValue > 3000) {
+//   //   console.log(`Warning: Time to first meaningful paint ${results.audits['first-meaningful-paint'].displayValue}`);
+//   //   process.exit(1);
+//   // }
+//   return results;
+// };
 
-/**
- * Handle error
- */
-const handleError = function(e) {
-  stopServer();
-  console.error(e); // eslint-disable-line no-console
-  throw e; // Throw to exit process with status 1.
-};
+// /**
+//  * Handle error
+//  */
+// const handleError = function(e) {
+//   stopServer();
+//   console.error(e); // eslint-disable-line no-console
+//   throw e; // Throw to exit process with status 1.
+// };
 
-const flags = {}; // available options - https://github.com/GoogleChrome/lighthouse/#cli-options
+// const flags = {}; // available options - https://github.com/GoogleChrome/lighthouse/#cli-options
 
 gulp.task('styles', function() {
   return gulp.src('./style.css')
@@ -76,11 +76,11 @@ gulp.task('styles', function() {
     .pipe(gulp.dest('./public'));
 });
 
-gulp.task('lighthouse', function() {
-  startServer();
-  return launchChromeAndRunLighthouse(`http://localhost:${PORT}/index.html`, flags, perfConfig)
-    .then(handleOk)
-    .catch(handleError);
-});
+// gulp.task('lighthouse', function() {
+//   startServer();
+//   return launchChromeAndRunLighthouse(`http://localhost:${PORT}/index.html`, flags, perfConfig)
+//     .then(handleOk)
+//     .catch(handleError);
+// });
 
-gulp.task('default', ['lighthouse']);
+gulp.task('default', ['styles']);
